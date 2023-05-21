@@ -1,0 +1,24 @@
+---
+title: "Homework 1"
+student: Iván Alejandro Esteban
+---
+```{r}
+#random matrix 
+weight_matrix <- matrix(runif(n=25, min=160, max=200), nrow=5)
+#name the matrix
+months <- c("January", "February", "March", "April", "May")
+people <- c("Amanda","Javier","Luis", "David", "Lucia")
+colnames(weight_matrix) <- months
+rownames(weight_matrix) <- people
+
+#average for people
+average_p <- rowMeans(weight_matrix)
+complete_matrix <- cbind(weight_matrix, average_p)
+
+#average for months
+average_m <- colMeans(complete_matrix)
+complete_matrix <- rbind(complete_matrix, average_m)
+
+#print matrix
+complete_matrix
+```
