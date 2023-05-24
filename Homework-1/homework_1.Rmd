@@ -1,13 +1,19 @@
 ---
 title: "Homework 1"
-student: Iván Alejandro Esteban
+student: Iván Alejandro Esteban Archila
 ---
 ```{r}
+if(!require('randomNames')) {
+  install.packages('randomNames')
+  library('randomNames')
+}
 #random matrix 
 weight_matrix <- matrix(runif(n=25, min=160, max=200), nrow=5)
 #name the matrix
 months <- c("January", "February", "March", "April", "May")
-people <- c("Amanda","Javier","Luis", "David", "Lucia")
+#random Names
+people <- randomNames(5, which.names="first")
+
 colnames(weight_matrix) <- months
 rownames(weight_matrix) <- people
 
