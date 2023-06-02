@@ -1,0 +1,188 @@
+---
+title: "Homework 2"
+student: Iván Alejandro Esteban
+---
+
+FUNCIONES EN R
+
+Una función consiste en un grupo de sentencias agrupadas para ejecutar una tarea
+en específico. En R una función es un objeto que puede recibir argumentos para
+completar las acciones.
+
+Estructura de una fución: 
+
+nombre_funcion <- function(argumento_1, argumento_2, ...){
+  
+  cuerpo o sentencias de la función.
+  sentencia 2
+  sentencia 3
+  
+  return value
+
+}
+
+Vemos que para declarar una función utilizamos la palabra reservada function
+
+
+EJEMPLOS DE FUNCIONES EN R
+Podemos ver algunos ejemplos de funciones en R, algunas de ellas ya las hemos
+utilizado en casos anteriores
+```{r}
+#Crear una secuencia de números
+print(seq(15,25))
+
+#Encontrar el promedio de números, de un array
+print(mean(c(5,15,45,2,6,26)))
+
+#Suma de números, del 45 al 89
+print(sum(45:89))
+
+```
+El comando que se utiliza para imprimir en consola, es una funcion llamada print()
+
+Para crear una función se utiliza la siguiente sintaxis: 
+```{r}
+sumarNumeros <- function(n1, n2){
+  print(n1+n2);
+}
+
+#Invocamos a la funcion con su nombre y enviamos los parámetros necesarios
+sumarNumeros(21,54)
+```
+
+ARGUMENTOS DE UNA FUNCIÓN
+Un argumento es una valor que es ingresado a la función para completar su acción. 
+Usualmente los argumentos son necesarios para invocar una función, es decir, 
+si una función tiene tres argumentos, cada vez que sea invocada se deben de 
+enviar los tres argumentos, pero pueden asignarse valores por defecto y así 
+evitar enviar los argumentos
+
+```{r}
+multiplicar <- function(a=2, b=8){
+  result <- a * b
+  print(result)
+}
+
+#Invocar a la función con argumentos
+multiplicar(5,6)
+
+#Invocar a la función sin argumentos
+multiplicar()
+```
+
+
+ARGUMENTOS POR VALOR
+Los argumentos de una función se envían en la misma secuencia en que fueron 
+definidos en la declaración de la función
+```{r}
+operacion <- function(a,b,c){
+  result <- a * b + c
+  print(result)
+}
+
+#Al llamar a la función operacion el primer argumento es la variable a, el segundo
+#es la variable b y el tercero la varaible c
+operacion(2,3,5)
+
+
+```
+
+
+FAMILIA apply
+Esta familia de funciones sirve para aplicar una función a todos los elementos
+de una matriz, vector o data frame.
+Su estructura es la siguiente: 
+
+    apply(X, MARGIN, FUN)
+    
+    X: matriz u objeto que pueda trabajarse como una matriz
+    MARGIN: dimensión, 1 para filas y 2 para columnas
+    FUN: función a aplicar
+    
+La familia apply esta formada por las siguientes funciones:
+
+    apply()
+    eapply()
+    lapply()
+    mapply()
+    rapply()
+    sapply()
+    tapply()
+    vapply()
+    
+Todas las funciones de esta familia tienen una característica en común: 
+reciben como argumentos a un objeto y al menos una función.
+
+```{r}
+matriz <- matrix(1:12 , nrow = 3)
+print(matriz)
+
+#Usando apply para sumar las filas de una matriz
+apply(X=matriz, MARGIN=1, FUN=sum)
+
+#Usando apply para sumar las columnas de una matriz
+apply(X=matriz, MARGIN=2, FUN=sum)
+
+#Usando apply para encontrar el valor maximo por filas
+apply(X=matriz, MARGIN=1, FUN=max)
+```
+LAPPLY
+Retorna una lista del mismo tamaño que la matriz X, cada elemento es el resultado
+de aplicar la funcions a cada elemento de X
+
+```{r}
+#Creamos una lista, con dos elementos, A = un vector y B = dataframe
+a <- list(A = c(8, 9, 7, 5), B <- data.frame(x = 1:5, y = c(5, 1, 0, 2, 3)))
+
+#Aplicamos lappy para sumar cada uno de sus elementos, es decir la suma de la
+# lista y la suma del data.frame
+lapply(a, sum)
+
+
+b <- c(12,18,6)
+#Aplicamos la función de raiz cuadrada sobre cada elemento de un vector
+lapply(b, sqrt)
+
+
+df <- data.frame(x = c(6, 2), y = c(3, 6), z = c(2, 3))
+# Función aplicada a todas las columnas
+lapply(1:ncol(df), function(i) df[, i] * i)
+```
+
+
+SAPPLY
+Es una versión mas amigable de LAPPLY,  por defecto retorna un vector, una matriz 
+o un array si se ingrea la opcion 'simplify = "array". 
+Si se ingresa la opción simplify = FALSE a la función SAPPLY entonces retornará
+una lista al igual que LAPPLY
+```{r}
+sapply(c(4, 9, 16), FUN = sqrt)
+
+#Para retornar una lista con la función sapply, se tienen las siguientes alternativas
+sapply(c(4, 9, 16), FUN = sqrt, simplify = FALSE)
+as.list(sapply(c(4, 9, 16), sqrt)) # Equivalent
+
+List <- list(A = 1:5, B = 6:20, C = 1)
+#SAPPLY en una lista
+sapply(List, length)
+```
+
+
+VAPPLY
+Similar a la función SAPPLY, pero tiene pre definido un tipo de valor de retorno,
+por lo que es mas segura y a veces mas rápida de utilizar.
+
+```{r}
+#Creamos una lista de elementos
+A<-c(-1: -10)
+B<-c(1:5)
+C<-c(1, 2, 3)
+lst<-list(A,B,C)
+#Aplicamos Vapply, indicando que el resultado debe ser numérico
+vapply(lst, min, numeric(1))
+
+#Si uno de los resultados no puede ser numérico, retorna error
+lst$C<-c("x", "y", "z")
+vapply(lst, min, numeric(1))
+```
+
