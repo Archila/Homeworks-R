@@ -1,0 +1,59 @@
+---
+title: "Homework 5"
+student: Iván Alejandro Esteban Archila
+---
+
+0 - Carga de archivos
+```{r}
+library(tidyverse)
+library(dplyr)
+
+answers <- read_csv('answers.csv')
+questions <- read_csv('questions.csv')
+tags <- read_csv('tags.csv')
+question_tags <- read_csv('question_tags.csv')
+
+```
+1 - Utilizar left joining y creación de variable questions_with_tags
+```{r}
+questions_with_tags <- questions %>%
+  left_join(question_tags, by=c("id" = "question_id")) %>%
+  left_join(tags, by=c("tag_id" = "id")) %>%
+  replace_na(list(tag_name="only-r"))
+```
+
+2 - Comparación de puntuación 
+```{r}
+questions_with_tags %>%
+  group_by(tag_name) %>%
+  summarise(mean_score = mean(score)) %>%
+  arrange(desc(mean_score))
+```
+3 - Encontrando brechas entre preguntas y respuestas
+```{r}
+gap_df <- questions %>%
+  inner_join(answers, by=c("id" = "question_id"), suffix=c("_question","_answer")) %>%
+  mutate(gap = creation_date_answer - creation_date_question)
+
+print(gap_df)
+```
+
+4- Conteo de preguntas y respuestas
+```{r}
+answer_count <- answers %>%
+  count(question_id, sort=TRUE)
+
+question_answer_count <- questions %>%
+  left_join(answer_count, by=c("id" = "question_id")) %>%
+  replace_na(list(n=0))
+
+print(question_answer_count)
+```
+
+5 - Joining questions, answers y tags
+```{r}
+question_tags %>%
+  inner_join(question_answer_count, by=c("question_id" = "id")) %>%
+  inner_join(tags, by=c("tag_id" = "id"))
+```
+
